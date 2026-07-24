@@ -32,19 +32,19 @@ export function AppCard({ app, index }: AppCardProps) {
         router.push("/login?next=/");
         return;
       }
-      window.open(bridgeUrl, "_blank", "noopener,noreferrer");
+      // Same-tab navigation keeps the hash intact and avoids popup blockers.
+      window.location.assign(bridgeUrl);
     } catch {
-      router.push("/login?next=/");
-    } finally {
       setIsOpening(false);
+      router.push("/login?next=/");
     }
   }
 
   return (
     <a
       href={app.ssoBridge ? `${app.href.replace(/\/$/, "")}/auth-bridge` : app.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={app.ssoBridge ? undefined : "_blank"}
+      rel={app.ssoBridge ? undefined : "noopener noreferrer"}
       onClick={app.ssoBridge ? openWithSso : undefined}
       aria-busy={isOpening || undefined}
       className="portal-module group"
