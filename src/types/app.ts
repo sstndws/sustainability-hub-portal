@@ -7,6 +7,8 @@ export interface AppCardData {
   title: string;
   description: string;
   href?: string;
+  /** When true, open via Supabase session bridge (/auth-bridge) instead of a plain link. */
+  ssoBridge?: boolean;
   status: AppStatus;
   icon: LucideIcon;
 }

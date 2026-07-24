@@ -17,7 +17,8 @@ export const apps: AppCardData[] = [
     title: "Sustainability Dashboard",
     description:
       "Central system for managing supplier due diligence, grievance mechanisms, and mill onboarding.",
-    href: "https://sustainability-dws-psi.vercel.app/",
+    href: "https://sustainability-dws-psi.vercel.app",
+    ssoBridge: true,
     status: "active",
     icon: Leaf,
   },
