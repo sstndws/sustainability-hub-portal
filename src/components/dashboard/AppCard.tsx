@@ -1,10 +1,5 @@
-"use client";
+import { ArrowUpRight } from "lucide-react";
 
-import { ArrowUpRight, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-import { buildSsoBridgeUrl } from "@/lib/sso-bridge";
 import type { AppCardData } from "@/types/app";
 
 interface AppCardProps {
@@ -14,39 +9,17 @@ interface AppCardProps {
 
 export function AppCard({ app, index }: AppCardProps) {
   const Icon = app.icon;
-  const router = useRouter();
-  const [isOpening, setIsOpening] = useState(false);
 
   if (!app.href) return null;
 
-  async function openWithSso(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (!app.ssoBridge || !app.href) return;
-
-    event.preventDefault();
-    if (isOpening) return;
-    setIsOpening(true);
-
-    try {
-      const bridgeUrl = await buildSsoBridgeUrl(app.href);
-      if (!bridgeUrl) {
-        router.push("/login?next=/");
-        return;
-      }
-      // Same-tab navigation keeps the hash intact and avoids popup blockers.
-      window.location.assign(bridgeUrl);
-    } catch {
-      setIsOpening(false);
-      router.push("/login?next=/");
-    }
-  }
+  const href = app.ssoBridge ? `/launch/${app.id}` : app.href;
+  const openInNewTab = !app.ssoBridge;
 
   return (
     <a
-      href={app.ssoBridge ? `${app.href.replace(/\/$/, "")}/auth-bridge` : app.href}
-      target={app.ssoBridge ? undefined : "_blank"}
-      rel={app.ssoBridge ? undefined : "noopener noreferrer"}
-      onClick={app.ssoBridge ? openWithSso : undefined}
-      aria-busy={isOpening || undefined}
+      href={href}
+      target={openInNewTab ? "_blank" : undefined}
+      rel={openInNewTab ? "noopener noreferrer" : undefined}
       className="portal-module group"
       style={{ animationDelay: `${index * 120}ms` }}
     >
@@ -70,17 +43,8 @@ export function AppCard({ app, index }: AppCardProps) {
       </p>
 
       <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#9A3B32]">
-        {isOpening ? (
-          <>
-            Opening…
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </>
-        ) : (
-          <>
-            Open module
-            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </>
-        )}
+        Open module
+        <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </span>
     </a>
   );

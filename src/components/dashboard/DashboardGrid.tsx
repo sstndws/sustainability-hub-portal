@@ -15,7 +15,7 @@ export function DashboardGrid() {
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:mt-4 sm:text-base">
           Access active sustainability modules from a single entry point. Select
-          an application below to open it in a new tab.
+          an application below to open it.
         </p>
       </section>
 
